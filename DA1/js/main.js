@@ -1,49 +1,90 @@
-"use strict";
 
-window.onload = function() {
-    // You can copy-and-paste the code from any of the examples at http://examples.phaser.io here.
-    // You will need to change the fourth parameter to "new Phaser.Game()" from
-    // 'phaser-example' to 'game', which is the id of the HTML element where we
-    // want the game to go.
-    // The assets (and code) can be found at: https://github.com/photonstorm/phaser/tree/master/examples/assets
-    // You will need to change the paths you pass to "game.load.image()" or any other
-    // loading functions to reflect where you are putting the assets.
-    // All loading functions will typically all be found inside "preload()".
-    
-    var game = new Phaser.Game( 800, 600, Phaser.AUTO, 'game', { preload: preload, create: create, update: update } );
-    
-    function preload() {
-        // Load an image and call it 'logo'.
-        game.load.image( 'logo', 'assets/phaser.png' );
-    }
-    
-    var bouncy;
-    
-    function create() {
-        // Create a sprite at the center of the screen using the 'logo' image.
-        bouncy = game.add.sprite( game.world.centerX, game.world.centerY, 'logo' );
-        // Anchor the sprite at its center, as opposed to its top-left corner.
-        // so it will be truly centered.
-        bouncy.anchor.setTo( 0.5, 0.5 );
-        
-        // Turn on the arcade physics engine for this sprite.
-        game.physics.enable( bouncy, Phaser.Physics.ARCADE );
-        // Make it bounce off of the world bounds.
-        bouncy.body.collideWorldBounds = true;
-        
-        // Add some text using a CSS style.
-        // Center it in X, and position its top 15 pixels from the top of the world.
-        var style = { font: "25px Verdana", fill: "#9999ff", align: "center" };
-        var text = game.add.text( game.world.centerX, 15, "Build something amazing.", style );
-        text.anchor.setTo( 0.5, 0.0 );
-    }
-    
-    function update() {
-        // Accelerate the 'logo' sprite towards the cursor,
-        // accelerating at 500 pixels/second and moving no faster than 500 pixels/second
-        // in X or Y.
-        // This function returns the rotation angle that makes it visually match its
-        // new trajectory.
-        bouncy.rotation = game.physics.arcade.accelerateToPointer( bouncy, game.input.activePointer, 500, 500, 500 );
+//Create Game Configuration
+var config = {
+    type: Phaser.AUTO,
+    width: 800,
+    height: 600,
+    physics: {
+        default: 'arcade'
+    },
+    parent: 'game',
+    scene: {
+        preload: preload,
+        create: create,
+        update: update
     }
 };
+
+//Game variables
+var game = new Phaser.Game(config);
+var map;
+var tileset;
+var background
+var asteroid_layer;
+var controls;
+var rocket;
+var cursors;
+var astronaut;
+var music;
+
+//Load Game Assets
+function preload() {
+    this.load.image('rocket', 'assets/sprites/rocket.png');
+    this.load.image('astronaut', 'assets/sprites/astronaut.png');
+    this.load.image('background', 'assets/seamless_space.png')
+    this.load.image('tileset_img', 'assets/tilemaps/asteroid_tileset.png');
+    this.load.tilemapTiledJSON('map_dat', 'assets/tilemaps/space_map.json');
+}
+
+function create() {
+    // Load Background
+    background = this.add.tileSprite(2560, 2560, 5120, 5120, 'background');
+    
+    //Load Tile Map
+    map = this.add.tilemap('map_dat');
+    tileset = map.addTilesetImage('Asteroids Tileset', 'tileset_img');
+    asteroid_layer = map.createStaticLayer('Asteroid Layer 1', tileset);
+    
+    // Load rocket
+    rocket = this.add.sprite(250, 250, 'rocket');
+    rocket.setScale(0.5,0.5);
+    
+    // Set collisions and physics
+    map.setCollisionBetween(0, 63); 
+    this.physics.add.existing(rocket);
+    this.physics.add.collider(rocket, asteroid_layer);
+    rocket.body.setAllowDrag(true);
+    rocket.body.setDrag(400);
+    
+    //Load astronaut
+    astronaut = this.add.sprite(Phaser.Math.Between(400,4800), Phaser.Math.Between(400,4800), 'astronaut');
+    astronaut.setScale(0.05,0.05);
+    
+    //Set camera properties
+    this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+    this.cameras.main.startFollow(rocket);
+    
+    //Set controls
+    cursors = this.input.keyboard.createCursorKeys();
+}
+
+
+function update() {
+    // Stop rotation
+    rocket.body.angularVelocity = 0;
+
+    // Set movement
+    if (cursors.left.isDown){
+        rocket.body.setAngularVelocity(-200);
+    }
+    else if (cursors.right.isDown){
+        rocket.body.setAngularVelocity(200);
+    }
+    else if (cursors.up.isDown){
+        this.physics.velocityFromAngle(rocket.angle, 400, rocket.body.velocity);
+    }
+    
+    // Move background
+    background.tilePositionX = rocket.body.x*0.1;
+    background.tilePositionY = rocket.body.y*0.1;
+}
