@@ -504,7 +504,7 @@ class GameScene extends Phaser.Scene {
                         callback: ()=>{
                             if (this.hit == false) {
                                 console.log("Miss!");
-                                this.blast1.destroy();
+                                this.blast2.destroy();
                                 this.dispBlockHealth();
                             }
                         },
