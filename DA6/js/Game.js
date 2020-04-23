@@ -425,6 +425,7 @@ class GameScene extends Phaser.Scene {
                         .setSize(5,5); 
                     this.physics.add.existing(this.blast1);
                     this.blast1.body.setOffset(30,30);
+                    this.blast1.body.allowGravity = false;
                     this.physics.add.overlap(this.p2CastleGroup, this.blast1, this.castleHit1, null, this.scene);
 
                     // Check for miss (overlap event has not occurred)
@@ -494,6 +495,7 @@ class GameScene extends Phaser.Scene {
                         .setSize(5,5);
                     this.physics.add.existing(this.blast2);
                     this.blast2.body.setOffset(30,30);
+                    this.blast2.body.allowGravity = false;
                     this.physics.add.overlap(this.p1CastleGroup, this.blast2, this.castleHit2, null, this.scene);
                     
                     // Check for miss (overlap event has not occurred)
