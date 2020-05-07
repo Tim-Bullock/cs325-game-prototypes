@@ -1652,7 +1652,7 @@ class GameScene extends Phaser.Scene {
                         if (this.p1SneakPowLeft > 0) {
                             this.p1SneakBox.setFillStyle(0xFFFFFF,1);
                             this.p1SneakBox.setInteractive();
-                            this.p1SneakText.setText( "Sneak Attack\nEffect: Automatically Destroy the\nLowest Health Block\nUses Per Game: " + this.p1AccuracyPowLeft)
+                            this.p1SneakText.setText( "Sneak Attack\nEffect: Automatically Destroy the\nLowest Health Block\nUses Per Game: " + this.p1SneakPowLeft)
                         }
                         // Reset Weapon Menu Options
                         this.p1Weapon = 1;
@@ -1825,7 +1825,7 @@ class GameScene extends Phaser.Scene {
                             },
                             loop: false
                         });
-                    // Otherwise Stop the Turn and go to player Two's Turn
+                    // Otherwise Stop the Turn and go to player One's Turn
                     } else {
                     
                         this.p2AttackMenuFadeOutTween.play();
@@ -1838,7 +1838,7 @@ class GameScene extends Phaser.Scene {
                         if (this.p2SneakPowLeft > 0) {
                             this.p2SneakBox.setFillStyle(0xFFFFFF,1);
                             this.p2SneakBox.setInteractive();
-                            this.p2SneakText.setText( "Sneak Attack\nEffect: Automatically Destroy the\nLowest Health Block\nUses Per Game: " + this.p2AccuracyPowLeft)
+                            this.p2SneakText.setText( "Sneak Attack\nEffect: Automatically Destroy the\nLowest Health Block\nUses Per Game: " + this.p2SneakPowLeft)
                         }
                         // Reset Weapon Menu Options
                         this.p2Weapon = 1;
@@ -1850,7 +1850,7 @@ class GameScene extends Phaser.Scene {
                             this.p2FireCanBox.setInteractive();
                             this.p2FireCanText.setText("Fire Cannon\nDamage: Up to 200\nAimer Speed: Very Fast\nCan Use: Every 3 Turns");
                         } else {
-                            this.p2FireCanText.setText("Fire Cannon\nDamage: Up to 200\nAimer Speed: Very Fast\nCan Use in: " + this.p1TurnsUntilFire +" Turns");
+                            this.p2FireCanText.setText("Fire Cannon\nDamage: Up to 200\nAimer Speed: Very Fast\nCan Use in: " + this.p2TurnsUntilFire +" Turns");
                             this.p2FireCanBox.setFillStyle(0xAAAAAA,1);
                         }
                         if (this.p2TurnsUntilTreb == 0) {
@@ -1858,7 +1858,7 @@ class GameScene extends Phaser.Scene {
                             this.p2TrebBox.setInteractive();
                             this.p2TrebText.setText("Trebuchet\nDamage: Up to 50, 2 Shots Per Turn\nAimer Speed: Regular\nCan Use: Every 3 Turns");
                         } else {
-                            this.p2TrebText.setText("Trebuchet\nDamage: Up to 50, 2 Shots Per Turn\nAimer Speed: Regular\nCan Use in: " + this.p1TurnsUntilTreb +" Turns");
+                            this.p2TrebText.setText("Trebuchet\nDamage: Up to 50, 2 Shots Per Turn\nAimer Speed: Regular\nCan Use in: " + this.p2TurnsUntilTreb +" Turns");
                             this.p2TrebBox.setFillStyle(0xAAAAAA,1);
                         }
                         
